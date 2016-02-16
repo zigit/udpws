@@ -1,0 +1,14 @@
+{application, udpws,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  sasl,
+                  gun
+                 ]},
+  {mod, { udpws_app, []}},
+  {env, []}
+ ]}.
