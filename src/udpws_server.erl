@@ -40,8 +40,8 @@ start_link() ->
 %% @end
 %%--------------------------------------------------------------------
 init([]) ->
-    {ok, Gun} = gun:open("echo.websocket.org", 80),
-    gun:ws_upgrade(Gun, "/"),
+    {ok, Gun} = gun:open("10.42.0.1", 1880),
+    gun:ws_upgrade(Gun, "/ws"),
     {ok, Udp} = gen_udp:open(1700, [{active, true}, binary]),
     {ok, #state{gun = Gun, udp = Udp}}.
 
