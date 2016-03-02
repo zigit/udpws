@@ -40,7 +40,7 @@ start_link() ->
 %% @end
 %%--------------------------------------------------------------------
 init([]) ->
-    {ok, Gun} = gun:open("10.42.0.1", 1880),
+    {ok, Gun} = gun:open("10.42.0.1", 1881),
     gun:ws_upgrade(Gun, "/ws"),
     {ok, Udp} = gen_udp:open(1702, [{active, true}, binary]),
     {ok, #state{gun = Gun, udp = Udp}}.
