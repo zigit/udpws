@@ -89,7 +89,7 @@ handle_info({udp, _Port, Ip, Port, Msg}, State) ->
     ok = gun:ws_send(State#state.gun, {binary, Msg}),
     {noreply, State};
 handle_info({gun_up, Pid, http}, State) ->
-    gun:ws_upgrade(Gun, "/ws"),
+    gun:ws_upgrade(State#state.gun, "/ws"),
     {noreply, State#state{gun = Pid}};
 handle_info({gun_ws,Pid,{Binary,Msg}}, State) ->
     gen_udp:send(State#state.udp, "localhost", 1701, Msg),
