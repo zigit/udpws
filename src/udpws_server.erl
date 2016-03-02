@@ -41,7 +41,6 @@ start_link() ->
 %%--------------------------------------------------------------------
 init([]) ->
     {ok, Gun} = gun:open("10.42.0.1", 1880),
-    gun:ws_upgrade(Gun, "/ws"),
     {ok, Udp} = gen_udp:open(1702, [{active, true}, binary]),
     {ok, #state{gun = Gun, udp = Udp}}.
 
@@ -90,6 +89,7 @@ handle_info({udp, _Port, Ip, Port, Msg}, State) ->
     ok = gun:ws_send(State#state.gun, {binary, Msg}),
     {noreply, State};
 handle_info({gun_up, Pid, http}, State) ->
+    gun:ws_upgrade(Gun, "/ws"),
     {noreply, State#state{gun = Pid}};
 handle_info({gun_ws,Pid,{Binary,Msg}}, State) ->
     gen_udp:send(State#state.udp, "localhost", 1701, Msg),
