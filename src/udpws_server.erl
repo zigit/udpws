@@ -8,7 +8,7 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {gun, udp}).
+-record(state, {gun, udp, port}).
 
 %%%===================================================================
 %%% API
@@ -87,12 +87,12 @@ handle_cast(_Msg, State) ->
 %%--------------------------------------------------------------------
 handle_info({udp, _Port, Ip, Port, Msg}, State) ->
     ok = gun:ws_send(State#state.gun, {binary, Msg}),
-    {noreply, State};
+    {noreply, State#state{port = Port}};
 handle_info({gun_up, Pid, http}, State) ->
     gun:ws_upgrade(State#state.gun, "/ws"),
     {noreply, State#state{gun = Pid}};
 handle_info({gun_ws,Pid,{Binary,Msg}}, State) ->
-    gen_udp:send(State#state.udp, "localhost", 1701, Msg),
+    gen_udp:send(State#state.udp, "localhost", State#state.port, Msg),
     {noreply, State};
 handle_info(Info, State) ->
     io:format("INFO: ~p~n", [Info]),
